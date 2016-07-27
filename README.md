@@ -4,7 +4,7 @@ Losslessly turn CFF OTF to TTF using otfcc.
 ## Installation
 
 ```bash
-npm install otfcc-c2q
+npm install -g otfcc-c2q
 ```
 
 ## Usage
