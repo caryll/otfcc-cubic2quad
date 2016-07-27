@@ -1,0 +1,12 @@
+{
+	"name": "otfcc-c2q",
+	"version": "0.1.0",
+	"main": "./ctq.js",
+	"license": "Apache 2.0",
+	"dependencies": {
+		"cubic2quad": "^1.0.0"
+	},
+	"bin": {
+		"otfcc-c2q": "./c2q.js"
+	}
+}
