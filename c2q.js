@@ -47,10 +47,18 @@ function toquad(contour) {
 			var z3 = contour[j + 1];
 			var z4 = contour[j + 2];
 			var quadzs = cubicToQuad(z1.x, z1.y, z2.x, z2.y, z3.x, z3.y, z4.x, z4.y, 0.5);
-			//process.stderr.write(quadzs + '\n');
 			var on = false;
+
+			var mx = (z1.x + z4.x) / 2;
+			var my = (z1.y + z4.y) / 2;
+			var bw = Math.abs(z4.x - z1.x);
+			var bh = Math.abs(z4.y - z1.y);
 			for (var k = 2; k < quadzs.length; k += 2) {
-				newcontour.push({ x: quadzs[k], y: quadzs[k + 1], on: on });
+				var cx = quadzs[k];
+				var cy = quadzs[k + 1];
+				if (Math.abs(cx - mx) <= bw && Math.abs(cy - my) <= bh) {
+					newcontour.push({ x: cx, y: cy, on: on });
+				}
 				on = !on;
 			}
 			j += 2;
