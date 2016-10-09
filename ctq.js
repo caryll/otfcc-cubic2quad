@@ -1,6 +1,6 @@
-var cubicToQuad = require('cubic2quad')
+var cubicToQuad = require("cubic2quad");
 
-function removeMids(contour) {
+function removeMids (contour) {
 	var last = contour.length - 1;
 	for (var j = 0; j < contour.length - 1; j++) {
 		if (Math.abs(contour[j].x - contour[j + 1].x) < 0.5 && Math.abs(contour[j].y - contour[j + 1].y) < 0.5) {
@@ -13,7 +13,7 @@ function removeMids(contour) {
 		contour[0].on = true;
 		last -= 1;
 	}
-	contour = contour.filter(function (x) { return !x.rem });
+	contour = contour.filter(function (x) { return !x.rem; });
 
 	last = contour.length - 1;
 	for (var j = 1; j < contour.length - 1; j++) {
@@ -32,19 +32,20 @@ function removeMids(contour) {
 			contour[0].rem = true;
 		}
 	}
-	return contour.filter(function (x) { return !x.rem });
+	return contour.filter(function (x) { return !x.rem; });
 }
 
-function toquad(contour) {
+function toquad (contour) {
 	var newcontour = [];
-	for (var j = 0; j < contour.length; j++) {
+	var N = contour.length;
+	for (var j = 0; j < N; j++) {
 		if (contour[j].on) {
 			newcontour.push(contour[j]);
 		} else {
 			var z1 = newcontour[newcontour.length - 1];
 			var z2 = contour[j];
-			var z3 = contour[j + 1];
-			var z4 = contour[j + 2];
+			var z3 = contour[(j + 1 % N)];
+			var z4 = contour[(j + 2 % N)];
 			var quadzs = cubicToQuad(z1.x, z1.y, z2.x, z2.y, z3.x, z3.y, z4.x, z4.y, 0.5);
 			var on = false;
 
@@ -80,4 +81,4 @@ module.exports = function (font) {
 		g.contourMasks = null;
 	}
 	font.maxp.version = 1.0;
-}
+};
