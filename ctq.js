@@ -44,8 +44,8 @@ function toquad (contour) {
 		} else {
 			var z1 = newcontour[newcontour.length - 1];
 			var z2 = contour[j];
-			var z3 = contour[(j + 1 % N)];
-			var z4 = contour[(j + 2 % N)];
+			var z3 = contour[(j + 1) % N];
+			var z4 = contour[(j + 2) % N];
 			var quadzs = cubicToQuad(z1.x, z1.y, z2.x, z2.y, z3.x, z3.y, z4.x, z4.y, 0.5);
 			var on = false;
 
