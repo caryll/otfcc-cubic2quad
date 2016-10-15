@@ -35,6 +35,16 @@ function removeMids (contour) {
 	return contour.filter(function (x) { return !x.rem; });
 }
 
+function canonicalStart (points) {
+	var jm = 0;
+	for (var j = 1; j < points.length; j++) {
+		if (points[j].x < points[jm].x || points[j].x === points[jm].x && points[j].y < points[jm].y) {
+			jm = j;
+		}
+	}
+	return points.slice(jm).concat(points.slice(0, jm)).reverse();
+}
+
 function toquad (contour) {
 	if (contour.length === 0) return [];
 	if (contour.length === 1) return [contour[0]];
@@ -75,17 +85,20 @@ function toquad (contour) {
 			j += 2;
 		}
 	}
-	return removeMids(newcontour);
+	return canonicalStart(removeMids(newcontour));
 }
 
 function haspt (c) { return c && c.length > 1; }
+function by_z0 (a, b) {
+	return a.x < b.x ? -1 : a.x === b.x ? a.y - b.y : 1;
+}
 
 module.exports = function (font) {
 	font.CFF_ = null;
 	for (var k in font.glyf) {
 		var g = font.glyf[k];
 		if (g.contours) {
-			g.contours = g.contours.map(toquad).filter(haspt);
+			g.contours = g.contours.map(toquad).filter(haspt).sort(by_z0);
 		}
 		g.stemH = null;
 		g.stemV = null;
