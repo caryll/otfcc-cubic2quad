@@ -67,8 +67,8 @@ function toquad (contour) {
 
 			var mx = (z1.x + z4.x) / 2;
 			var my = (z1.y + z4.y) / 2;
-			var bw = 0.75 * Math.abs(z4.x - z1.x);
-			var bh = 0.75 * Math.abs(z4.y - z1.y);
+			var bw = Math.abs(z4.x - z1.x);
+			var bh = Math.abs(z4.y - z1.y);
 			for (var k = 2; k < quadzs.length - 2; k += 2) {
 				var cx = quadzs[k];
 				var cy = quadzs[k + 1];
