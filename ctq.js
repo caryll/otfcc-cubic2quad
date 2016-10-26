@@ -1,6 +1,6 @@
 var cubicToQuad = require("cubic2quad");
 
-function removeMids (contour) {
+function removeMids(contour) {
 	var last = contour.length - 1;
 	for (var j = 0; j < contour.length - 1; j++) {
 		if (Math.abs(contour[j].x - contour[j + 1].x) < 0.5 && Math.abs(contour[j].y - contour[j + 1].y) < 0.5) {
@@ -35,7 +35,7 @@ function removeMids (contour) {
 	return contour.filter(function (x) { return !x.rem; });
 }
 
-function canonicalStart (points) {
+function canonicalStart(points) {
 	var jm = 0;
 	for (var j = 1; j < points.length; j++) {
 		if (points[j].x < points[jm].x || points[j].x === points[jm].x && points[j].y < points[jm].y) {
@@ -45,7 +45,7 @@ function canonicalStart (points) {
 	return points.slice(jm).concat(points.slice(0, jm)).reverse();
 }
 
-function toquad (contour) {
+function toquad(contour) {
 	if (contour.length === 0) return [];
 	if (contour.length === 1) return [contour[0]];
 	var newcontour = [];
@@ -72,9 +72,7 @@ function toquad (contour) {
 			for (var k = 2; k < quadzs.length - 2; k += 2) {
 				var cx = quadzs[k];
 				var cy = quadzs[k + 1];
-				if (Math.abs(cx - mx) <= bw && Math.abs(cy - my) <= bh) {
-					newcontour.push({ x: cx, y: cy, on: on });
-				}
+				newcontour.push({ x: cx, y: cy, on: on });
 				on = !on;
 			}
 			newcontour.push({
@@ -88,8 +86,8 @@ function toquad (contour) {
 	return canonicalStart(removeMids(newcontour));
 }
 
-function haspt (c) { return c && c.length > 1; }
-function by_z0 (a, b) {
+function haspt(c) { return c && c.length > 1; }
+function by_z0(a, b) {
 	return a.x < b.x ? -1 : a.x === b.x ? a.y - b.y : 1;
 }
 
