@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var child_process = require("child_process");
 var os = require("os");
 var command = process.execPath;
