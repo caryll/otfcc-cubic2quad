@@ -91,17 +91,24 @@ function by_z0(a, b) {
 	return a.x < b.x ? -1 : a.x === b.x ? a.y - b.y : 1;
 }
 
+function c2qContours(contours) {
+	return contours.map(toquad).filter(haspt).sort(by_z0);
+}
+
 module.exports = function (font) {
 	font.CFF_ = null;
 	for (var k in font.glyf) {
 		var g = font.glyf[k];
 		if (g.contours) {
-			g.contours = g.contours.map(toquad).filter(haspt).sort(by_z0);
+			g.contours = c2qContours(g.contours);
 		}
 		g.stemH = null;
 		g.stemV = null;
 		g.hintMasks = null;
 		g.contourMasks = null;
+		return g;
 	}
 	font.maxp.version = 1.0;
 };
+
+module.exports.contours = c2qContours;
