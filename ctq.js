@@ -106,7 +106,6 @@ module.exports = function (font) {
 		g.stemV = null;
 		g.hintMasks = null;
 		g.contourMasks = null;
-		return g;
 	}
 	font.maxp.version = 1.0;
 };
