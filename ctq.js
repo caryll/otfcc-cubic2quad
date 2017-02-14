@@ -87,12 +87,9 @@ function toquad(contour) {
 }
 
 function haspt(c) { return c && c.length > 1; }
-function by_z0(a, b) {
-	return a.x < b.x ? -1 : a.x === b.x ? a.y - b.y : 1;
-}
 
 function c2qContours(contours) {
-	return contours.map(toquad).filter(haspt).sort(by_z0);
+	return contours.map(toquad).filter(haspt);
 }
 
 module.exports = function (font) {
