@@ -1,6 +1,6 @@
 {
 	"name": "otfcc-c2q",
-	"version": "0.5.0",
+	"version": "0.6.0",
 	"main": "./ctq.js",
 	"license": "Apache 2.0",
 	"dependencies": {
