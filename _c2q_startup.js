@@ -8,4 +8,4 @@ var args = [
 	require.resolve("./c2q_cli"),
 	...process.argv.slice(2)
 ];
-child_process.spawnSync(command, args, {stdio: "inherit"});
+child_process.spawnSync(command, args, { stdio: "inherit" });
