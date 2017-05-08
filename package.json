@@ -1,12 +1,12 @@
 {
-	"name": "otfcc-c2q",
-	"version": "0.6.1",
-	"main": "./ctq.js",
-	"license": "Apache 2.0",
-	"dependencies": {
-		"cubic2quad": "^1.1.0"
-	},
-	"bin": {
-		"otfcc-c2q": "./_c2q_startup.js"
-	}
+  "name": "otfcc-c2q",
+  "version": "0.6.2",
+  "main": "./ctq.js",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "cubic2quad": "^1.1.0"
+  },
+  "bin": {
+    "otfcc-c2q": "./_c2q_startup.js"
+  }
 }
