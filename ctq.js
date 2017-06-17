@@ -3,24 +3,38 @@ const cubicToQuad = require("cubic2quad");
 function removeMids(contour, err) {
 	var last = contour.length - 1;
 	for (var j = 0; j < contour.length - 1; j++) {
-		if (Math.abs(contour[j].x - contour[j + 1].x) < 1 && Math.abs(contour[j].y - contour[j + 1].y) < 1) {
+		if (
+			Math.abs(contour[j].x - contour[j + 1].x) < 1 &&
+			Math.abs(contour[j].y - contour[j + 1].y) < 1
+		) {
 			contour[j + 1].rem = true;
 			contour[j].on = true;
 		}
 	}
-	while (last > 0 && Math.abs(contour[0].x - contour[last].x) < 1 && Math.abs(contour[0].y - contour[last].y) < 1) {
+	while (
+		last > 0 &&
+		Math.abs(contour[0].x - contour[last].x) < 1 &&
+		Math.abs(contour[0].y - contour[last].y) < 1
+	) {
 		contour[last].rem = true;
 		contour[0].on = true;
 		last -= 1;
 	}
-	contour = contour.filter(function (x) { return !x.rem; });
+	contour = contour.filter(function(x) {
+		return !x.rem;
+	});
 
 	last = contour.length - 1;
 	for (var j = 1; j < contour.length - 1; j++) {
 		if (!contour[j - 1].on && contour[j].on && !contour[j + 1].on) {
 			var mx = contour[j - 1].x + contour[j + 1].x;
 			var my = contour[j - 1].y + contour[j + 1].y;
-			if (Math.abs(contour[j].x * 2 - mx) < err && Math.abs(contour[j].y * 2 - my) < err) {
+			var dy = contour[j - 1].y - contour[j + 1].y;
+			if (
+				Math.abs(dy) >= 1 &&
+				Math.abs(contour[j].x * 2 - mx) < err &&
+				Math.abs(contour[j].y * 2 - my) < err
+			) {
 				contour[j].rem = true;
 			}
 		}
@@ -32,13 +46,18 @@ function removeMids(contour, err) {
 			contour[0].rem = true;
 		}
 	}
-	return contour.filter(function (x) { return !x.rem; });
+	return contour.filter(function(x) {
+		return !x.rem;
+	});
 }
 
 function canonicalStart(points) {
 	var jm = 0;
 	for (var j = 1; j < points.length; j++) {
-		if (points[j].x < points[jm].x || points[j].x === points[jm].x && points[j].y < points[jm].y) {
+		if (
+			points[j].x < points[jm].x ||
+			(points[j].x === points[jm].x && points[j].y < points[jm].y)
+		) {
 			jm = j;
 		}
 	}
@@ -48,7 +67,7 @@ function canonicalStart(points) {
 function quadSolve(a, b, c) {
 	// a*x^2 + b*x + c = 0
 	if (a === 0) {
-		return (b === 0) ? [] : [-c / b];
+		return b === 0 ? [] : [-c / b];
 	}
 	var D = b * b - 4 * a * c;
 	if (D < 0) {
@@ -77,34 +96,39 @@ function splitAt(x1, y1, x2, y2, x3, y3, x4, y4, t) {
 	var ey = sy * u + fy * v;
 	var dy = cy * u + ey * v;
 
-	return [
-		[x1, y1, bx, by, cx, cy, dx, dy],
-		[dx, dy, ex, ey, fx, fy, x4, y4]
-	];
+	return [[x1, y1, bx, by, cx, cy, dx, dy], [dx, dy, ex, ey, fx, fy, x4, y4]];
 }
 function splitAtTs(x1, y1, x2, y2, x3, y3, x4, y4, ts) {
 	if (!ts.length) return [[x1, y1, x2, y2, x3, y3, x4, y4]];
 	let s = splitAt(x1, y1, x2, y2, x3, y3, x4, y4, ts[0]);
 	if (ts.length === 1) {
-		return s
+		return s;
 	} else {
 		return [s[0]].concat(splitAtTs(...s[1], ts.slice(1)));
 	}
 }
 
-function fin(t) { return t > 0.001 && t < 0.999 }
-function substraction(x, y) { return x - y }
+function fin(t) {
+	return t > 0.001 && t < 0.999;
+}
+function substraction(x, y) {
+	return x - y;
+}
 
 function getSplitAtXY(x1, y1, x2, y2, x3, y3, x4, y4, splitAtX, splitAtY) {
 	const ax = 3 * (-x1 + 3 * x2 - 3 * x3 + x4);
-	const bx = 6 * (x1 - 2 * x2 + x3)
+	const bx = 6 * (x1 - 2 * x2 + x3);
 	const cx = 3 * (x2 - x1);
 	const ay = 3 * (-y1 + 3 * y2 - 3 * y3 + y4);
-	const by = 6 * (y1 - 2 * y2 + y3)
+	const by = 6 * (y1 - 2 * y2 + y3);
 	const cy = 3 * (y2 - y1);
 	let ts = [];
-	if (splitAtX) { ts = ts.concat(quadSolve(ax, bx, cx)) }
-	if (splitAtY) { ts = ts.concat(quadSolve(ay, by, cy)) }
+	if (splitAtX) {
+		ts = ts.concat(quadSolve(ax, bx, cx));
+	}
+	if (splitAtY) {
+		ts = ts.concat(quadSolve(ay, by, cy));
+	}
 	return splitAtTs(x1, y1, x2, y2, x3, y3, x4, y4, ts.filter(fin).sort(substraction));
 }
 
@@ -113,7 +137,7 @@ function handle(z1, z2, z3, z4, splitAtX, splitAtY, err) {
 	const ss = [];
 	for (let s of segs) {
 		let a = cubicToQuad(...s, err);
-		for (let j = (ss.length ? 2 : 0); j < a.length; j++) {
+		for (let j = ss.length ? 2 : 0; j < a.length; j++) {
 			ss.push(a[j]);
 		}
 	}
@@ -161,7 +185,9 @@ function toquad(contour, splitAtX, splitAtY, err) {
 	return canonicalStart(removeMids(newcontour, err));
 }
 
-function haspt(c) { return c && c.length > 1; }
+function haspt(c) {
+	return c && c.length > 1;
+}
 
 function c2qContours(contours, splitAtX, splitAtY, err) {
 	let ans = [];
@@ -172,7 +198,7 @@ function c2qContours(contours, splitAtX, splitAtY, err) {
 	return ans;
 }
 
-module.exports = function (font, splitAtX, splitAtY, err) {
+module.exports = function(font, splitAtX, splitAtY, err) {
 	font.CFF_ = null;
 	for (var k in font.glyf) {
 		var g = font.glyf[k];
