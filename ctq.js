@@ -51,17 +51,24 @@ function removeMids(contour, err) {
 	});
 }
 
-function canonicalStart(points) {
+function canonicalStart(_points) {
 	var jm = 0;
+	var points = _points.reverse();
 	for (var j = 1; j < points.length; j++) {
+		if (points[j].y > points[jm].y) {
+			jm = j;
+		}
+	}
+	for (var j = 0; j < points.length; j++) {
+		if (!points[j].on) continue;
 		if (
-			points[j].x < points[jm].x ||
-			(points[j].x === points[jm].x && points[j].y < points[jm].y)
+			points[j].y < points[jm].y ||
+			(points[j].y === points[jm].y && points[j].x < points[jm].x)
 		) {
 			jm = j;
 		}
 	}
-	return points.slice(jm).concat(points.slice(0, jm)).reverse();
+	return points.slice(jm).concat(points.slice(0, jm));
 }
 
 function quadSolve(a, b, c) {
@@ -80,7 +87,8 @@ function quadSolve(a, b, c) {
 }
 
 function splitAt(x1, y1, x2, y2, x3, y3, x4, y4, t) {
-	var u = 1 - t, v = t;
+	var u = 1 - t,
+		v = t;
 
 	var bx = x1 * u + x2 * v;
 	var sx = x2 * u + x3 * v;
