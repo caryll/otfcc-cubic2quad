@@ -1,12 +1,14 @@
-var path = require('path');
-var fs = require('fs');
-var convert = require('./ctq.js');
+const { Workflow, introduce, build, quadify, gc } = require("megaminx");
 
-var glyfsource = '';
-process.stdin.resume();
-process.stdin.on('data', function (buf) { glyfsource += buf.toString(); });
-process.stdin.on('end', function () {
-	var font = JSON.parse(glyfsource.trim());
-	convert(font);
-	process.stdout.write(JSON.stringify(font));
-});
+async function quadifyFn(ctx) {
+	await ctx.run(introduce, "major", { from: "|" });
+	await ctx.run(quadify, "major");
+	await ctx.run(build, "major", { to: "|" });
+}
+
+const main = async function() {
+	const flow = new Workflow({});
+	await flow.run(quadifyFn);
+};
+
+main().catch(console.log);
