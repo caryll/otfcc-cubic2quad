@@ -1,10 +1,10 @@
 {
   "name": "otfcc-c2q",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "main": "./ctq.js",
   "license": "Apache 2.0",
   "dependencies": {
-    "megaminx":"^0.4.2"
+    "megaminx":"^0.8.2"
   },
   "bin": {
     "otfcc-c2q": "./_c2q_startup.js"
